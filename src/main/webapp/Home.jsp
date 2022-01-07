@@ -13,7 +13,7 @@
 <!-- Favicons -->
 <link rel="icon" href="Media/ticket.png" sizes="32x32" type="image/png">
 
-<title>theMovieDB &#8226; Welcome</title>
+<title>WhatsThatMovie &#8226; Welcome</title>
 <script src="Components/jquery-3.6.0.min.js"></script>
 <script src="Components/Home.js"></script>
 <script src="Components/js.cookie.min.js"></script>
@@ -25,7 +25,7 @@
 			<a href="#"
 				class="d-flex align-items-center text-dark text-decoration-none main">
 				<img class="mx-2" src="Media/ticket.png" alt="" width="40"
-				height="40"> <span class="fs-4">theMovieDB</span>
+				height="40"> <span class="fs-4">WhatsThatMovie</span>
 			</a>
 
 			<nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto ">
@@ -40,7 +40,7 @@
 						id="heromain">
 						<h1 class="display-4 fw-bold lh-1 mb-3">Ohoy!</h1>
 						<p class="col-lg-10 fs-4">Hello there, welcome to the
-							theMovieDB. Get signed in to see the latest shows and ratings.
+							WhatsThatMovie. Get signed in to see the latest shows and ratings.
 							Don't have an account yet? get signed up today.</p>
 					</div>
 					<div class="col-10 mx-auto col-lg-5 text-dark">
@@ -62,7 +62,7 @@
 								type="button" id="signin" name="signin">Sign In</button>
 							<hr class="my-2">
 							<small class="text-muted disable-select">Contact
-								the Administrator at admin@theMovieDB.lk for any login-related issues.</small>
+								the Administrator at admin@WhatsThatMovie.lk for any login-related issues.</small>
 						</form>
 					</div>
 				</div>
@@ -91,7 +91,7 @@
 			<div class="row">
 				<div class="col-12 col-md">
 					<small class="d-block mb-3 text-muted">&copy; 2021
-						theMovieDB.</small>
+						WhatsThatMovie.</small>
 				</div>
 				<div class="col-6 col-md">
 					<h5>Sign Up</h5>
