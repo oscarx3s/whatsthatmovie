@@ -1,5 +1,10 @@
 package com.mdb.db;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,6 +13,7 @@ import com.google.gson.JsonObject;
 import com.mdb.api.comm.MLServiceCommHandler;
 import com.mdb.util.DBMethod;
 import com.mdb.util.JsonResponseBuilder;
+import com.mdb.util.Resources;
 
 public class MovieDBHandler extends DBHandler{
 	MLServiceCommHandler mlServiceCommHandler;
@@ -18,17 +24,14 @@ public class MovieDBHandler extends DBHandler{
 			if (conn == null) {
 				return new JsonResponseBuilder().getJsonErrorResponse("Operation has been terminated due to a database connectivity issue.");
 			}
-			
-			byte[] byteData = thumbnail.getBytes();
 
-			String query = "INSERT INTO movies(moviename, desc, genre, year, thumbnail) VALUES(?,?,?,?,?);";
+			String query = "INSERT INTO movies(moviename, \"desc\", genre, \"year\", thumbnail) VALUES(?,?,?,?,null);";
 			PreparedStatement preparedStmt = conn.prepareStatement(query);
 
 			preparedStmt.setString(1, name);
 			preparedStmt.setString(2, desc);
 			preparedStmt.setString(3, genre);
 			preparedStmt.setString(4, year);
-			preparedStmt.setBytes(5, byteData);
 
 			int status = preparedStmt.executeUpdate();
 			conn.close();
@@ -84,7 +87,9 @@ public class MovieDBHandler extends DBHandler{
 				//byte[] blobbytes = rs.getBytes("thumbnail");
 				//recordObject.addProperty("thumbnail", new String(blobbytes));
 				
-				recordObject.addProperty("thumbnail", "null");
+				byte[] thumbnail = getThumbBytes(rs.getString("moviename"));
+				recordObject.addProperty("thumbnail", new String(thumbnail));
+				
 				resultArray.add(recordObject);
 				
 			}
@@ -133,9 +138,8 @@ public class MovieDBHandler extends DBHandler{
 				movie.addProperty("genre", rs.getString("genre"));
 				movie.addProperty("desc", rs.getString("desc"));
 				
-				byte[] blobbytes = rs.getBytes("thumbnail");
-				
-				movie.addProperty("thumbnail", new String(blobbytes));
+				byte[] thumbnail = getThumbBytes(rs.getString("moviename"));
+				movie.addProperty("thumbnail", new String(thumbnail));
 
 			}
 			conn.close();
@@ -160,15 +164,14 @@ public class MovieDBHandler extends DBHandler{
 				return new JsonResponseBuilder().getJsonErrorResponse("Operation has been terminated due to a database connectivity issue."); 
 			}
 
-			String query = "UPDATE movies SET moviename=?, genre=?, desc=?, year=?, thumbnail=? WHERE movieid=?;";
+			String query = "UPDATE movies SET moviename=?, genre=?, \"desc\"=?, \"year\"=?, thumbnail=null WHERE movieid=?;";
 			PreparedStatement preparedStmt = conn.prepareStatement(query);
 
-			preparedStmt.setString(6, movieid);
+			preparedStmt.setInt(5, Integer.parseInt(movieid));
 			preparedStmt.setString(1, name);
 			preparedStmt.setString(2, genre);
 			preparedStmt.setString(3, desc);
 			preparedStmt.setString(4, year);
-			preparedStmt.setString(5, thumbnail);
 
 			int status = preparedStmt.executeUpdate();
 			conn.close();
@@ -198,7 +201,7 @@ public class MovieDBHandler extends DBHandler{
 			String query = "DELETE FROM movies WHERE movieid=?;";
 			PreparedStatement preparedStmt = conn.prepareStatement(query);
 
-			preparedStmt.setString(1, movieid);
+			preparedStmt.setInt(1, Integer.parseInt(movieid));
 
 			int status = preparedStmt.executeUpdate();
 			conn.close();
@@ -212,6 +215,17 @@ public class MovieDBHandler extends DBHandler{
 		catch (Exception ex) {
 			System.err.println(ex.getMessage());
 			return new JsonResponseBuilder().getJsonExceptionResponse("Error occurred while deleting Movie " + movieid + ". Exception Details:" + ex);
+		}
+	}
+	
+	public byte[] getThumbBytes(String name) throws FileNotFoundException, IOException {
+		try {
+			String thumbname = name.replaceAll("[-+^:#@!~` '\"\\/+-.,)(&%$]*", "");
+			System.out.println("Thumbname is: " + thumbname);
+			Path path = Paths.get("C:\\whatsthatmovie_thumbnails\\" + thumbname);
+		    return Files.readAllBytes(path);
+		} catch (IOException ex) {
+			return Resources.defaultThumbnail.getBytes();
 		}
 	}
 }

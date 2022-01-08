@@ -1,6 +1,8 @@
 package com.mdb.api;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 
 import javax.servlet.ServletException;
@@ -42,6 +44,12 @@ public class MovieAPIServlet extends HttpServlet {
 			String thumbnail = "data:image/png;base64,"+request.getParameter("moviethumbtxt");
 			System.out.println(thumbnail);			
 			
+			String thumbname = name.replaceAll("[-+^:#@!~` '\"\\/+-.,)(&%$]*", "");
+			byte[] byteData = thumbnail.getBytes();
+			try (OutputStream stream = new FileOutputStream("C:\\whatsthatmovie_thumbnails\\" + thumbname, false)) {
+			    stream.write(byteData);
+			}
+			
 			//getting the response
 			JsonObject dbResponseJSON = movieDBHandler.insertMovie(name, genre, year, desc, thumbnail);
 			//test the response
@@ -79,6 +87,12 @@ public class MovieAPIServlet extends HttpServlet {
 			String genre = requestParameters.get("moviegenre");
 			String year = requestParameters.get("movieyear");
 			String thumbnail = "data:image/png;base64,"+requestParameters.get("moviethumbtxt");
+			
+			String thumbname = name.replaceAll("[-+^:#@!~` '\"\\/+-.,)(&%$]*", "");
+			byte[] byteData = thumbnail.getBytes();
+			try (OutputStream stream = new FileOutputStream("C:\\whatsthatmovie_thumbnails\\" + thumbname, false)) {
+			    stream.write(byteData);
+			}
 
 			//getting the response
 			JsonObject dbResponseJSON = movieDBHandler.updateMovie(movieid, name, genre, desc, year, thumbnail);
@@ -123,6 +137,8 @@ public class MovieAPIServlet extends HttpServlet {
 			if (dbResponseJSON.get("STATUS").getAsString().equalsIgnoreCase(OpStatus.SUCCESSFUL.toString())) {
 				JsonObject movieList = movieDBHandler.getMovies();
 				dbResponseJSON.addProperty("MOVIES",generateMoviesTable(movieList));
+//				Path filePath = Paths.get("C:\\whatsthatmovie_thumbnails\\" + "Croods");
+//				Files.deleteIfExists(filePath);
 			}
 
 			response.getWriter().append(dbResponseJSON.toString());
@@ -193,7 +209,7 @@ public class MovieAPIServlet extends HttpServlet {
 			
 			cardStr += "<div class='col'>"
 					+ "<div class='card shadow-sm card-dark-custom'>"
-					+ "<div class='card-img-top' style='background-color:black; background:url("+ thumbnailData +"); background-repeat:no-repeat; background-size:cover; height:250px; width:100%'>"
+					+ "<div class='card-img-top' style='background-color:black; background:url(" + thumbnailData + "); background-repeat:no-repeat; background-size:cover; height:220px; width:100%''>"
 					+ "</div>"
 					+ "<div class='card-body' id='mcard'>"
 					+ "<h5 id='mname'>" + movie.get("name").getAsString() + "</h5>"
@@ -201,7 +217,7 @@ public class MovieAPIServlet extends HttpServlet {
 					+ "<!--<p id='mdesc'>" + movie.get("desc").getAsString() + "</p>-->"+ "<div class='d-flex justify-content-between align-items-center'>"
 					+ "<div class='btn-group'>"
 					+ "<!--<input name='movieview' id='movieview' type='button' value='View' class='btn btn-sm btn-secondary w-100' data-movieid='" + movie.get("movieid").getAsString() + "'>--></td>"
-					+ "<input name='movieupdate' id='movieupdate' type='button' value='Update' class='btn btn-sm btn-secondary w-100' data-thumb='"+ thumbnailData +"' data-movieid='" + movie.get("movieid").getAsString() + "' data-moviedesc=\"" + movie.get("desc").getAsString() + "\"></td>"
+					+ "<input name='movieupdate' id='movieupdate' type='button' value='Update' class='btn btn-sm btn-secondary w-100' data-thumb='" + thumbnailData + "' data-movieid='" + movie.get("movieid").getAsString() + "' data-moviedesc=\"" + movie.get("desc").getAsString() + "\"></td>"
 					+ "<input name='moviedelete' id='moviedelete' type='button' value='Delete' class='btn btn-sm btn-danger w-100' data-movieid='" + movie.get("movieid").getAsString() + "'></td>"
 					+ "</div>"
 					+ "<small class='text-muted' id='myear'>" + movie.get("year").getAsString() + "</small>"
