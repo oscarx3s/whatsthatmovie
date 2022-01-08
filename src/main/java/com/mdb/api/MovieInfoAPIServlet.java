@@ -110,34 +110,34 @@ public class MovieInfoAPIServlet extends HttpServlet {
 				+ "<div class='mb-1 text-secondary'>" + movieObj.get("genre").getAsString() + "</div>"
 				+ "<div class='mb-1 text-secondary'>" + movieObj.get("year").getAsString() + "</div>"
 				+ "<p class='card-text mb-auto text-white mt-2'>" + movieObj.get("desc").getAsString() + "</p> " //movieObj.get("desc").getAsString()
-				+ "<a href='' class='stretched-link text-secondary'>Like</a>"
+				+ "<a class='stretched-link text-secondary'>Like</a>"
 				+ "</div>"
 				+ "<div class='col-auto d-none d-lg-block'>"
 				+ "<div class='card-img-top grid m-3' "
 				+ "style='background-color: black; background: url("+ thumbnailData +"); background-repeat: no-repeat; background-size: cover; height: 250px; width: 420px'>"
-				+ "</div> </div> </div> </div>"
+				+ "</div> </div> </div> </div>";
 				//Recommendation Selection
-				+ "<div class='row g-3 mb-4'>"
-				+ "<div class='col-md-9'>"
-				+ "<select id='algoselect' name='algoselect' class='form-select'>"
-				+ "<option selected>FPG</option>"
-				+ "<option>APR</option>"
-				+ "</select>"
-				+ "</div>"
-				+ "<div class='col-md-3'>"
-				+ "<button type='button' class='btn btn-warning w-100' id='recommendmovies'"
-				+ "name='recommendmovies' data-task='association' data-movieid='" + movieObj.get("movieid").getAsString() + "'>Get Recommendations</button>"
-				+ "</div> </div>"
+				// + "<div class='row g-3 mb-4'>"
+				// + "<div class='col-md-9'>"
+				// + "<select id='algoselect' name='algoselect' class='form-select'>"
+				// + "<option selected>FPG</option>"
+				// + "<option>APR</option>"
+				// + "</select>"
+				// + "</div>"
+				// + "<div class='col-md-3'>"
+				// + "<button type='button' class='btn btn-warning w-100' id='recommendmovies'"
+				// + "name='recommendmovies' data-task='association' data-movieid='" + movieObj.get("movieid").getAsString() + "'>Get Recommendations</button>"
+				// + "</div></div>"
 				//Recommendation Grid area
-				+ "<div class='row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3'>"
-				+ "<div class='col w-100'>"
-				+ "<div class='card shadow-sm card-dark-custom'>"
-				+ "<div class='grid' style='-bs-columns: 2;'>"
-				+ "<div class='card-body grid' id='minfo'>"
-				+ "<strong class='d-inline-block mb-2 text-warning'>Movies you'd love</strong>"
-				+ "<div class='row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3' id='recommendationsGrid'>"
-				+ "<!-- RECOMMENDED TOP 3 MOVIE CARDS -->";				
-		htmlContent += "</div> </div> </div> </div> </div> </div>";
+				// + "<div class='row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3'>"
+				// + "<div class='col w-100'>"
+				// + "<div class='card shadow-sm card-dark-custom'>"
+				// + "<div class='grid' style='-bs-columns: 2;'>"
+				// + "<div class='card-body grid' id='minfo'>"
+				// + "<strong class='d-inline-block mb-2 text-warning'>Movies you'd love</strong>"
+				// + "<div class='row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3' id='recommendationsGrid'>"
+				// + "<!-- RECOMMENDED TOP 3 MOVIE CARDS -->";				
+		// htmlContent += "</div> </div> </div> </div> </div> </div>";
 		return htmlContent;
 	}
 }

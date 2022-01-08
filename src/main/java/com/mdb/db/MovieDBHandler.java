@@ -122,7 +122,7 @@ public class MovieDBHandler extends DBHandler{
 			String query = "SELECT * FROM movies WHERE movieid=?;";
 			PreparedStatement preparedStmt = conn.prepareStatement(query);
 			
-			preparedStmt.setString(1, movieId);
+			preparedStmt.setInt(1, Integer.parseInt(movieId));
 
 			ResultSet rs = preparedStmt.executeQuery();
 
