@@ -13,7 +13,7 @@
 <!-- FAVICONS -->
 <link rel="icon" href="Media/ticket.png" sizes="32x32" type="image/png">
 
-<title>theMovieDB &#8226; Library</title>
+<title>WhatsThatMovie &#8226; Library</title>
 <script src="Components/jquery-3.6.0.min.js"></script>
 <script src="Components/MovieLibrary.js"></script>
 <script src="Components/js.cookie.min.js"></script>
@@ -26,7 +26,7 @@
 		<a href="#"
 			class="d-flex align-items-center text-dark text-decoration-none main">
 			<img class="mx-2 my-2" src="Media/ticket.png" alt="" width="40"
-			height="40"> <span class="fs-4 text-white"><strong>theMovieDB</strong>
+			height="40"> <span class="fs-4 text-white"><strong>WhatsThatMovie</strong>
 				| Library</span>
 		</a>
 		<button class="navbar-toggler position-absolute d-md-none collapsed"

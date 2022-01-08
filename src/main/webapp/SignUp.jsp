@@ -13,7 +13,7 @@
 <!-- Favicons -->
 <link rel="icon" href="Media/ticket.png" sizes="32x32" type="image/png">
 
-<title>theMovieDB &#8226; Sign Up</title>
+<title>WhatsThatMovie &#8226; Sign Up</title>
 <!-- <script src="Components/jquery-3.2.1.min.js"></script> -->
 <script src="Components/jquery-3.6.0.min.js"></script>
 <script src="Components/SignUp.js"></script>
@@ -26,7 +26,7 @@
 				class="d-flex align-items-center text-dark text-decoration-none main"
 				draggable="false"> <img class="mx-2" src="Media/ticket.png"
 				alt="" width="40" height="40" draggable="false"> <span
-				class="fs-4">theMovieDB</span>
+				class="fs-4">WhatsThatMovie</span>
 			</a>
 			<nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto ">
 				<a class="me-3 py-2 text-dark text-decoration-none" href="Home.jsp">Home</a>
@@ -99,10 +99,10 @@
 			<div class="row">
 				<div class="col-12 col-md">
 					<small class="d-block mb-3 text-muted">&copy; 2021
-						theMovieDB.</small>
+						WhatsThatMovie.</small>
 				</div>
 				<div class="col-6 col-md">
-					<h5>theMovieDB</h5>
+					<h5>WhatsThatMovie</h5>
 					<ul class="list-unstyled text-small">
 						<li class="mb-1"><a
 							class="link-secondary text-decoration-none" href="Home.jsp">Home</a></li>
