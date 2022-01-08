@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mdb.api.comm.MLServiceCommHandler;
+import com.mdb.util.DBMethod;
 import com.mdb.util.JsonResponseBuilder;
 
 public class MovieDBHandler extends DBHandler{
@@ -13,14 +14,14 @@ public class MovieDBHandler extends DBHandler{
 	
 	public JsonObject insertMovie(String name, String genre, String year, String desc, String thumbnail) {
 		try {
-			Connection conn = getConnection();
+			Connection conn = getConnection(DBMethod.HEROKU_POSTGRES);
 			if (conn == null) {
 				return new JsonResponseBuilder().getJsonErrorResponse("Operation has been terminated due to a database connectivity issue.");
 			}
 			
 			byte[] byteData = thumbnail.getBytes();
 
-			String query = "INSERT INTO `movies`(`moviename`, `desc`, `genre`, `year`, `thumbnail`) VALUES(?,?,?,?,?);";
+			String query = "INSERT INTO movies(moviename, desc, genre, year, thumbnail) VALUES(?,?,?,?,?);";
 			PreparedStatement preparedStmt = conn.prepareStatement(query);
 
 			preparedStmt.setString(1, name);
@@ -50,16 +51,18 @@ public class MovieDBHandler extends DBHandler{
 
 		try
 		{
-			Connection conn = getConnection();
+			Connection conn = getConnection(DBMethod.HEROKU_POSTGRES);
 			if (conn == null) {
 				return new JsonResponseBuilder().getJsonErrorResponse("Operation has been terminated due to a database connectivity issue."); 
 			}
 
-			//TESTS
-			//String query = "SELECT * FROM `movies` ORDER BY RAND() LIMIT 9;";
-			//String query = "SELECT * FROM `movies` LIMIT 9;";
-			//String query = "SELECT * FROM `movies` WHERE `movieid`=200119;";
-			String query = "SELECT * FROM `movies`;";
+			// LIMITING
+			//String query = "SELECT * FROM movies ORDER BY RAND() LIMIT 9;";
+			//String query = "SELECT * FROM movies LIMIT 9;";
+			//String query = "SELECT * FROM movies WHERE movieid=200119;";
+			
+			// NON LIMITING
+			String query = "SELECT * FROM movies;";
 			
 			PreparedStatement preparedStmt = conn.prepareStatement(query);
 
@@ -78,11 +81,12 @@ public class MovieDBHandler extends DBHandler{
 				recordObject.addProperty("genre", rs.getString("genre"));
 				recordObject.addProperty("desc", rs.getString("desc"));
 				
-				byte[] blobbytes = rs.getBytes("thumbnail");
+				//byte[] blobbytes = rs.getBytes("thumbnail");
+				//recordObject.addProperty("thumbnail", new String(blobbytes));
 				
-				recordObject.addProperty("thumbnail", new String(blobbytes));
+				recordObject.addProperty("thumbnail", "null");
 				resultArray.add(recordObject);
-
+				
 			}
 			conn.close();
 
@@ -105,12 +109,12 @@ public class MovieDBHandler extends DBHandler{
 
 		try
 		{
-			Connection conn = getConnection();
+			Connection conn = getConnection(DBMethod.HEROKU_POSTGRES);
 			if (conn == null) {
 				return new JsonResponseBuilder().getJsonErrorResponse("Operation has been terminated due to a database connectivity issue."); 
 			}
 
-			String query = "SELECT * FROM `movies` WHERE `movieid`=?;";
+			String query = "SELECT * FROM movies WHERE movieid=?;";
 			PreparedStatement preparedStmt = conn.prepareStatement(query);
 			
 			preparedStmt.setString(1, movieId);
@@ -151,12 +155,12 @@ public class MovieDBHandler extends DBHandler{
 		JsonObject result = null;
 		
 		try {
-			Connection conn = getConnection();
+			Connection conn = getConnection(DBMethod.HEROKU_POSTGRES);
 			if (conn == null) {
 				return new JsonResponseBuilder().getJsonErrorResponse("Operation has been terminated due to a database connectivity issue."); 
 			}
 
-			String query = "UPDATE `movies` SET `moviename`=?, `genre`=?, `desc`=?, `year`=?, `thumbnail`=? WHERE `movieid`=?;";
+			String query = "UPDATE movies SET moviename=?, genre=?, desc=?, year=?, thumbnail=? WHERE movieid=?;";
 			PreparedStatement preparedStmt = conn.prepareStatement(query);
 
 			preparedStmt.setString(6, movieid);
@@ -186,12 +190,12 @@ public class MovieDBHandler extends DBHandler{
 
 	public JsonObject deleteMovie(String movieid) {
 		try {
-			Connection conn = getConnection();
+			Connection conn = getConnection(DBMethod.HEROKU_POSTGRES);
 			if (conn == null) {
 				return new JsonResponseBuilder().getJsonErrorResponse("Operation has been terminated due to a database connectivity issue.");
 			}
 
-			String query = "DELETE FROM `movies` WHERE `movieid`=?;";
+			String query = "DELETE FROM movies WHERE movieid=?;";
 			PreparedStatement preparedStmt = conn.prepareStatement(query);
 
 			preparedStmt.setString(1, movieid);

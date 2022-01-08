@@ -5,17 +5,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mdb.util.DBMethod;
 import com.mdb.util.JsonResponseBuilder;
 
 public class UserDBHandler extends DBHandler {
 	public JsonObject insertUser(String email, String password, String role, String first_name, String last_name, String gender) {
 		try {
-			Connection conn = getConnection();
+			Connection conn = getConnection(DBMethod.HEROKU_POSTGRES);
 			if (conn == null) {
 				return new JsonResponseBuilder().getJsonErrorResponse("Operation has been terminated due to a database connectivity issue.");
 			}
 
-			String query = "INSERT INTO `users`(`fname`, `lname`, `email`, `password`, `role`, `gender`, `cancomment`, `isactive`) VALUES(?,?,?,?,?,?,?,?);";
+			String query = "INSERT INTO users(fname, lname, email, password, role, gender, cancomment, isactive) VALUES(?,?,?,?,?,?,?,?);";
 			PreparedStatement preparedStmt = conn.prepareStatement(query);
 
 			preparedStmt.setString(1, first_name);
@@ -46,12 +47,12 @@ public class UserDBHandler extends DBHandler {
 		JsonObject result = null;
 		try
 		{
-			Connection conn = getConnection();
+			Connection conn = getConnection(DBMethod.HEROKU_POSTGRES);
 			if (conn == null) {
 				return new JsonResponseBuilder().getJsonErrorResponse("Operation has been terminated due to a database connectivity issue."); 
 			}
 
-			String query = "SELECT * FROM `users` u WHERE u.`email`= ? AND u.`password`=?;";
+			String query = "SELECT * FROM users u WHERE u.email= ? AND u.password=?;";
 			PreparedStatement preparedStmt = conn.prepareStatement(query);
 
 			preparedStmt.setString(1, email);
@@ -88,12 +89,12 @@ public class UserDBHandler extends DBHandler {
 
 		try
 		{
-			Connection conn = getConnection();
+			Connection conn = getConnection(DBMethod.HEROKU_POSTGRES);
 			if (conn == null) {
 				return new JsonResponseBuilder().getJsonErrorResponse("Operation has been terminated due to a database connectivity issue."); 
 			}
 
-			String query = "SELECT * FROM `users`;";
+			String query = "SELECT * FROM users;";
 			PreparedStatement preparedStmt = conn.prepareStatement(query);
 
 			ResultSet rs = preparedStmt.executeQuery();
@@ -136,15 +137,15 @@ public class UserDBHandler extends DBHandler {
 		JsonObject result = null;
 		
 		try {
-			Connection conn = getConnection();
+			Connection conn = getConnection(DBMethod.HEROKU_POSTGRES);
 			if (conn == null) {
 				return new JsonResponseBuilder().getJsonErrorResponse("Operation has been terminated due to a database connectivity issue."); 
 			}
 
-			String query = "UPDATE `users` SET `email`=?, `password`=?, `fname`=?, `lname`=?, `gender`=?, `role`=? WHERE `userid`=?;";
+			String query = "UPDATE users SET email=?, password=?, fname=?, lname=?, gender=?, role=? WHERE userid=?;";
 			PreparedStatement preparedStmt = conn.prepareStatement(query);
 
-			preparedStmt.setString(7, user_id);
+			preparedStmt.setInt(7, Integer.parseInt(user_id));
 			preparedStmt.setString(1, email);
 			preparedStmt.setString(2, password);
 			preparedStmt.setString(3, first_name);
@@ -181,16 +182,16 @@ public class UserDBHandler extends DBHandler {
 		}
 
 		try {
-			Connection conn = getConnection();
+			Connection conn = getConnection(DBMethod.HEROKU_POSTGRES);
 			if (conn == null) {
 				return new JsonResponseBuilder().getJsonErrorResponse("Operation has been terminated due to a database connectivity issue."); 
 			}
 
-			String query = "UPDATE `user` SET `is_deactivated`=? WHERE `user_id`=?;";
+			String query = "UPDATE user SET is_deactivated=? WHERE user_id=?;";
 			PreparedStatement preparedStmt = conn.prepareStatement(query);
 
 			preparedStmt.setString(1, state);
-			preparedStmt.setString(2, user_id);
+			preparedStmt.setInt(2, Integer.parseInt(user_id));
 
 			int status = preparedStmt.executeUpdate();
 			conn.close();
@@ -214,16 +215,16 @@ public class UserDBHandler extends DBHandler {
 		JsonObject result = null;
 		try {			
 
-			Connection conn = getConnection();
+			Connection conn = getConnection(DBMethod.HEROKU_POSTGRES);
 			if (conn == null) {
 				return new JsonResponseBuilder().getJsonErrorResponse("Operation has been terminated due to a database connectivity issue."); 
 			}
 
 			// check if the user is valid by retrieving the user using the old password given
-			String queryRtr = "SELECT u.`user_id` FROM `user` u WHERE u.`user_id` = ? AND u.`password`=?;";
+			String queryRtr = "SELECT u.user_id FROM user u WHERE u.user_id = ? AND u.password=?;";
 			PreparedStatement preparedStmtRtr = conn.prepareStatement(queryRtr);
 
-			preparedStmtRtr.setString(1, user_id);
+			preparedStmtRtr.setInt(1, Integer.parseInt(user_id));
 			preparedStmtRtr.setString(2, oldPassword);
 			ResultSet rs = preparedStmtRtr.executeQuery();
 
@@ -240,11 +241,11 @@ public class UserDBHandler extends DBHandler {
 				return new JsonResponseBuilder().getJsonErrorResponse("Failed to validate the existing password. Password changing failed.");
 			}
 
-			String queryUpd = "UPDATE `user` SET `password`=? WHERE `user_id`=?;";
+			String queryUpd = "UPDATE user SET password=? WHERE user_id=?;";
 			PreparedStatement preparedStmtUpd = conn.prepareStatement(queryUpd);
 
 			preparedStmtUpd.setString(1, newPassword);
-			preparedStmtUpd.setString(2, user_id);
+			preparedStmtUpd.setInt(2, Integer.parseInt(user_id));
 
 			int status = preparedStmtUpd.executeUpdate();
 			conn.close();
@@ -266,15 +267,15 @@ public class UserDBHandler extends DBHandler {
 
 	public JsonObject deleteUser(String user_id) {
 		try {
-			Connection conn = getConnection();
+			Connection conn = getConnection(DBMethod.HEROKU_POSTGRES);
 			if (conn == null) {
 				return new JsonResponseBuilder().getJsonErrorResponse("Operation has been terminated due to a database connectivity issue.");
 			}
 
-			String query = "DELETE FROM `users` WHERE `userid`=?;";
+			String query = "DELETE FROM users WHERE userid=?;";
 			PreparedStatement preparedStmt = conn.prepareStatement(query);
 
-			preparedStmt.setString(1, user_id);
+			preparedStmt.setInt(1, Integer.parseInt(user_id));
 
 			int status = preparedStmt.executeUpdate();
 			conn.close();
